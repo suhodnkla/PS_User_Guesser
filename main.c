@@ -9,7 +9,7 @@
 
 #define dis_line    puts("________________________________________________________________________________________________\n")
 
-const char master_dir[] = "C:\\MYTEST\\DIS_CODE\\";
+const char master_dir[] = "<directory>";
 
 const int long_len = 30;
 
@@ -199,7 +199,7 @@ int main(){
 
     do{
         static int i = 0;
-        sprintf(dir,"%s%s\\%d",master_dir,"GPT",i);
+        sprintf(dir,"%s%s\\%d",master_dir,"<Username>",i);
         dis_line;
         i++;
     }while(~guess_who(dir,1));
