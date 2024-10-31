@@ -13,26 +13,27 @@ const char master_dir[] = "<directory>";
 
 const int long_len = 30;
 
-const int substr_type = 10;
+const int substr_type = 11;
 const int etc_type = 2;
 const int type_cnt = substr_type + etc_type;
 
 const char find_str[16][16][16]={
-{"){",      ") {"},
-{"vector<", "queue<",   "map<",     "stack<",   "set<",     "pair<",    "string",   "tuple<"},
-{"template","typedef"},
-{"union",   "register", "static",   "alloc",    "goto"},
-{"auto"},
-{"int*",    "double*",  "float*",   "long*",    "char*",
- "int *",   "double *", "float *",  "long *",   "char *"},
-{"{"},
-{"cin",     "cout"},
-{"#"},
-{"?"}};
+        {"struct",  "class"},
+        {"){",      ") {"},
+        {"vector<", "queue<",   "map<",     "stack<",   "set<",     "pair<",    "string",   "tuple<"},
+        {"template","typedef",  "using"},
+        {"union",   "register", "static",   "alloc",    "goto"},
+        {"auto"},
+        {"int*",    "double*",  "float*",   "long*",    "char*",
+         "int *",   "double *", "float *",  "long *",   "char *"},
+        {"{"},
+        {"cin",     "cout"},
+        {"#"},
+        {"?"}};
 
-const char type_name[16][16]={"Ast","STL","tmp","wrd","aut","poi","CB","C++","pre","thr","lng","emt"};
+const char type_name[16][16]={"str","Ast","STL","tmp","wrd","aut","poi","CB","C++","pre","thr","lng","emt"};
 
-double W[16]={ 1, 3.5, 1, 10, 2, 1, 0.5, 0.5, 0.5, 10, 0.1,1};
+double W[16]={4, 1, 3.5, 1, 10, 2, 1, 0.5, 0.5, 0.5, 10, 0.1, 2};
 //TODO change this with automatic. Or make every type-Group has own W value automatic
 
 struct code_type{
@@ -55,7 +56,7 @@ double get_point(int*type,double*ans,double*grp){
 
     for(register int i = 0;i ^ type_cnt;i++)
         ans[i]=pow(type[i]-grp[i],2)*W[i],
-        ret += ans[i];
+                ret += ans[i];
 
     return ret;
 }
@@ -73,7 +74,7 @@ void get_line(char*line,int*type){
         if(*i != '\t' && *i != ' ')
             goto OUT;
     type[substr_type+1]++;
-OUT:
+    OUT:
     return;
 }
 
@@ -100,6 +101,9 @@ int init(){
         strcpy(Dtop.name,name);
         for(int T = 0;;T++){
 
+            int idx = -1;
+            double Cl = 200.0;
+
             int code_len = 0;
 
             sprintf(dir,"%s%s\\%d",master_dir,name,T);
@@ -116,25 +120,26 @@ int init(){
             for(int i = 0;i < Dtop.len;i++){
                 for(int j =0;j < type_cnt;j++)
                     Gi.type[j]/=Gi.cnt;
-                if(get_point(type,buf,Gi.type)<= 120.0/Gi.cnt){
-                    //TODO change formula it's too weird
-                    for(int j = 0;j < type_cnt;j++)
-                        Gi.type[j]*=Gi.cnt,
-                        Gi.type[j]+=type[j];
-                    Gi.av_len+=code_len;
-                    Gi.cnt++;
-                    goto out;
-                }
+                register double tmp = get_point(type,buf,Gi.type);
+                if(tmp <= 120.0/Gi.cnt&&tmp<Cl)
+                    idx = i,
+                    Cl=tmp;
                 for(int j =0;j < type_cnt;j++)
                     Gi.type[j]*=Gi.cnt;
             }
-
-            for(int i = 0;i < type_cnt;i++)
-                Dtop.G[Dtop.len].type[i]+=type[i];
-            Dtop.G[Dtop.len].cnt++;
-            Dtop.len++;
-
-            out:
+            if(!~idx) {
+                for (int i = 0; i < type_cnt; i++)
+                    Dtop.G[Dtop.len].type[i] += type[i];
+                Dtop.G[Dtop.len].cnt++;
+                Dtop.G[Dtop.len].av_len += code_len;
+                Dtop.len++;
+            }
+            else{
+                for(int i = 0;i < type_cnt;i++)
+                    Dtop.G[idx].type[i] += type[i];
+                Dtop.G[idx].cnt++;
+                Dtop.G[idx].av_len += code_len;
+            }
             fclose(code);
         }
         for(int i = 0;i < Dtop.len;i++)
@@ -148,7 +153,7 @@ int init(){
 int guess_who(char* dir, bool log){
 
     double min_score=-1,tmp;
-    int clostest = 0;
+    int closest = 0;
 
     double WW[64]={0,};
 
@@ -176,18 +181,18 @@ int guess_who(char* dir, bool log){
 
             if(tmp<min_score||min_score==-1)
                 min_score=tmp,
-                clostest=i;
+                        closest=i;
 
             if(log)
                 if(usr_min>tmp||usr_min==-1)
                     usr_min=tmp,
-                    Gn=j;
+                            Gn=j;
         }
         if(log)
             printf("%16s\t %c : %.1lf\n",devs[i].name,Gn+'A',usr_min);
     }
 
-    printf("this code is written by %s\n",devs[clostest].name);
+    printf("this code is written by %s\n",devs[closest].name);
     return 0;
 }
 
@@ -196,7 +201,6 @@ int main(){
 
     if(!~init())
         return 1;
-
     do{
         static int i = 0;
         sprintf(dir,"%s%s\\%d",master_dir,"<Username>",i);
