@@ -18,14 +18,15 @@ const int etc_type = 2;
 const int type_cnt = substr_type + etc_type;
 
 const char find_str[16][16][16]={
-{"){",") {"},
-{"vector<","queue<","map<","stack<","set<","pair<","string","tuple<"},
-{"template", "typedef"},
-{"union","register","static","alloc","goto"},
+{"){",      ") {"},
+{"vector<", "queue<",   "map<",     "stack<",   "set<",     "pair<",    "string",   "tuple<"},
+{"template","typedef"},
+{"union",   "register", "static",   "alloc",    "goto"},
 {"auto"},
-{"int*","double*","float*","long*","char*","int *","double *","float *","long *","char *"},
+{"int*",    "double*",  "float*",   "long*",    "char*",
+ "int *",   "double *", "float *",  "long *",   "char *"},
 {"{"},
-{"cin","cout"},
+{"cin",     "cout"},
 {"#"},
 {"?"}};
 
@@ -43,7 +44,6 @@ struct code_type{
         double type[16];
         double av_len;
     }G[16];
-
 }devs[32];
 
 int length;
@@ -70,7 +70,7 @@ void get_line(char*line,int*type){
         type[substr_type]++;
 
     for(register char* i = line;*i;i++)
-        if(*i!='\t'&&*i!=' ')
+        if(*i != '\t' && *i != ' ')
             goto OUT;
     type[substr_type+1]++;
 OUT:
