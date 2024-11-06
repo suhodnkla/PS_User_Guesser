@@ -11,7 +11,7 @@
 
 const char master_dir[] = "<Directory>";
 
-const int long_len = 32;
+const int long_len = 30;
 
 const int substr_type = 11;
 const int etc_type = 2;
