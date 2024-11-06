@@ -8,14 +8,15 @@
 #include <pthread.h>
 
 #define dis_line    puts("________________________________________________________________________________________________\n")
+#define uint        unsigned int
 
 const char master_dir[] = "<Directory>";
 
-const int long_len = 34;
+const uint long_len = 34;
 
-const int substr_type = 11;
-const int etc_type = 2;
-const int type_cnt = substr_type + etc_type;
+const uint substr_type = 11;
+const uint etc_type = 2;
+const uint type_cnt = substr_type + etc_type;
 
 const char find_str[16][16][16]={
         {"struct",  "class"},
@@ -46,14 +47,14 @@ struct code_type{
     }G[16];
 }devs[32];
 
-int length;
+uint length;
 
 double get_point(int*type,double*ans,double*grp){
     double ret = 0;
-    for(register int i = 0;i ^ type_cnt;i++)
+    for(register uint i = 0;i ^ type_cnt;i++)
         ans[i]=0;
 
-    for(register int i = 0;i ^ type_cnt;i++)
+    for(register uint i = 0;i ^ type_cnt;i++)
         ans[i]=pow(type[i]-grp[i],2)*W[i],
         ret += ans[i];
 
@@ -82,13 +83,13 @@ int init(void){
 #define Dtop    devs[length]
 #define Gi      Dtop.G[i]
 
-    double buf[16];
+    double buf[type_cnt];
 
     char name[128];
     char dir[128];
     char line[256];
 
-    int type[16];
+    int type[type_cnt];
 
     sprintf(dir, "%s\\names",master_dir);
 
