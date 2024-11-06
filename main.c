@@ -9,7 +9,7 @@
 
 #define dis_line    puts("________________________________________________________________________________________________\n")
 
-const char master_dir[] = "<directory>";
+const char master_dir[] = "<Directory>";
 
 const int long_len = 30;
 
@@ -34,7 +34,6 @@ const char find_str[16][16][16]={
 const char type_name[16][16]={"str","Ast","STL","tmp","wrd","aut","poi","CB","C++","pre","thr","lng","emt"};
 
 double W[16]={4, 1, 3.5, 1, 10, 2, 1, 0.5, 0.5, 0.5, 10, 0.1, 2};
-//TODO change this with automatic. Or make every type-Group has own W value automatic
 
 struct code_type{
     char name[32];
@@ -56,7 +55,7 @@ double get_point(int*type,double*ans,double*grp){
 
     for(register int i = 0;i ^ type_cnt;i++)
         ans[i]=pow(type[i]-grp[i],2)*W[i],
-                ret += ans[i];
+        ret += ans[i];
 
     return ret;
 }
@@ -78,7 +77,7 @@ void get_line(char*line,int*type){
     return;
 }
 
-int init(){
+int init(void){
 
 #define Dtop    devs[length]
 #define Gi      Dtop.G[i]
@@ -91,7 +90,7 @@ int init(){
 
     int type[16];
 
-    sprintf(dir, "%snames",master_dir);
+    sprintf(dir, "%s\\names",master_dir);
 
     FILE* namefile=fopen(dir,"r+");
     if(namefile == NULL)
@@ -106,7 +105,7 @@ int init(){
 
             int code_len = 0;
 
-            sprintf(dir,"%s%s\\%d",master_dir,name,T);
+            sprintf(dir,"%s\\%s\\%d",master_dir,name,T);
             FILE*code=fopen(dir,"r");
 
             memset(type,0,sizeof(int)*type_cnt);
@@ -144,7 +143,7 @@ int init(){
         }
         for(int i = 0;i < Dtop.len;i++)
             for(int j = 0;j < type_cnt;j++)
-                Dtop.G[i].type[j]/=Dtop.G[i].cnt;
+                Dtop.G[i].type[j] /= Dtop.G[i].cnt;
     }
     fclose(namefile);
     return 0;
@@ -181,19 +180,32 @@ int guess_who(char* dir, bool log){
 
             if(tmp<min_score||min_score==-1)
                 min_score=tmp,
-                        closest=i;
+                closest=i;
 
             if(log)
                 if(usr_min>tmp||usr_min==-1)
                     usr_min=tmp,
-                            Gn=j;
+                    Gn=j;
         }
         if(log)
             printf("%16s\t %c : %.1lf\n",devs[i].name,Gn+'A',usr_min);
     }
 
     printf("this code is written by %s\n",devs[closest].name);
+    dis_line;
     return 0;
+}
+
+void print_dev_grp(int n){
+    printf("%s : \n",devs[n].name);
+    for(int i = 0;i < devs[n].len;i++){
+        printf("%c : %d\n",'A'+i,devs[n].G[i].cnt);
+        for(int j = 0;j < type_cnt;j++)
+            printf("%0.1f\t",devs[n].G[i].type[j]);
+        puts("");
+    }
+
+    dis_line;
 }
 
 int main(){
@@ -201,12 +213,14 @@ int main(){
 
     if(!~init())
         return 1;
+    for(int i = 0;i < length;i++)
+        print_dev_grp(i);
     do{
         static int i = 0;
-        sprintf(dir,"%s%s\\%d",master_dir,"<Username>",i);
-        dis_line;
+
+        sprintf(dir,"%s\\%s\\%d",master_dir,"<Username>",i);
+
         i++;
     }while(~guess_who(dir,1));
-
     return 0;
 }
