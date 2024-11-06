@@ -44,7 +44,7 @@ struct code_type{
         double type[16];
         double av_len;
     }G[16];
-}devs[32];
+}devs[64];
 
 int length;
 
