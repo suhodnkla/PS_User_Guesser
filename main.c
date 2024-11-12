@@ -114,7 +114,7 @@ int init(void){
             if(code==NULL)
                 break;
 
-            for(;fgets(line,128,code);code_len++)
+            for(;fgets(line,255,code);code_len++)
                 get_line(line,type);
 
             for(int i = 0;i < Dtop.len;i++){
