@@ -210,7 +210,7 @@ void print_dev_grp(int n){
 }
 
 int main(){
-    char dir[256];
+    char dir[512];
 
     if(!~init())
         return 1;
