@@ -150,7 +150,7 @@ int init(void){
     return 0;
 }
 
-int guess_who(char* dir, bool log){
+int guess_who(const char* dir, const bool log){
 
     double min_score=-1,tmp;
     int closest = 0;
