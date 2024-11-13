@@ -34,7 +34,7 @@ const char find_str[16][16][16]={
 
 const char type_name[16][16]={"str","Ast","STL","tmp","wrd","aut","poi","CB","C++","pre","thr","lng","emt"};
 
-double W[16]={4, 1, 3.5, 1, 10, 2, 1, 0.5, 0.5, 0.5, 10, 0.1, 2};
+double W[16]={4, 1, 3.5, 1, 10, 2, 1, 0.5, 0.5, 0.5, 10, 0.1, 1};
 
 struct code_type{
     char name[32];
@@ -71,7 +71,7 @@ void get_line(char*line,int*type){
         type[substr_type]++;
 
     for(register char* i = line;*i;i++)
-        if(*i != '\t' && *i != ' ')
+        if(*i != '\t' && *i != ' '&& *i!= '\n')
             goto OUT;
     type[substr_type+1]++;
     OUT:
@@ -121,7 +121,7 @@ int init(void){
                 for(int j =0;j < type_cnt;j++)
                     Gi.type[j]/=Gi.cnt;
                 register double tmp = get_point(type,buf,Gi.type);
-                if(tmp <= 120.0/Gi.cnt&&tmp<Cl)
+                if(tmp <= 120/Gi.cnt&&tmp<Cl)
                     idx = i,
                     Cl=tmp;
                 for(int j =0;j < type_cnt;j++)
@@ -219,7 +219,7 @@ int main(){
     do{
         static int i = 0;
 
-        sprintf(dir,"%s\\%s\\%d",master_dir,"<Username>",i);
+        sprintf(dir,"%s\\%s\\%d",master_dir,"<Name>",i);
 
         i++;
     }while(~guess_who(dir,1));
