@@ -194,7 +194,7 @@ int guess_who(const char* dir, const bool log){
 
     printf("this code is written by %s\n",devs[closest].name);
     dis_line;
-    return 0;
+    return closest;
 }
 
 void print_dev_grp(int n){
